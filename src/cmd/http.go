@@ -22,7 +22,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 	"net/http"
-	_ "net/http/pprof"
+	_ "net/http/pprof" // import is enough when using the default http package to serve content to enable the debug endpoints
 )
 
 // httpCmd represents the http command

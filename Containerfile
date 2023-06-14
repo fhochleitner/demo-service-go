@@ -1,6 +1,6 @@
 ARG VERSION=latest
 
-FROM golang:1.19-alpine as BUILD
+FROM golang:1.20-alpine as BUILD
 ARG VERSION
 
 RUN apk add --no-cache gcc g++ make
@@ -11,7 +11,7 @@ COPY src/go.mod src/go.sum ./
 RUN go mod verify && go mod download
 COPY src/ .
 
-RUN GOOOS=linux GOARCH=amd64 go build -o git-workflows -ldflags="-X main.version=$VERSION" .
+RUN GOOOS=linux GOARCH=amd64 go build -o demo-service -ldflags="-X main.version=$VERSION" .
 
 FROM alpine:3.18.0
 

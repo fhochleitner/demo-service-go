@@ -17,6 +17,9 @@ package main
 
 import "gepaplexx/demo-service/cmd"
 
+var version string = "0.1.0"
+
 func main() {
+	cmd.Version = version
 	cmd.Execute()
 }

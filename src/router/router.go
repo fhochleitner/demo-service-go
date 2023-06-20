@@ -19,6 +19,7 @@ func Initialize(config *api.Config) *gin.Engine {
 
 	// Global middlewares
 	AddGlobalMiddleware(gin.Recovery())
+	AddGlobalMiddleware(prometheusMiddleware())
 
 	if !config.Development {
 		AddGlobalMiddleware(jsonLoggerMiddleware())
@@ -26,6 +27,8 @@ func Initialize(config *api.Config) *gin.Engine {
 	} else {
 		AddGlobalMiddleware(gin.Logger())
 	}
+
+	router.Use(globalMiddlewares...)
 
 	// Routes
 	router.GET(config.MetricsPath, gin.WrapH(promhttp.Handler()))
@@ -43,7 +46,6 @@ func Initialize(config *api.Config) *gin.Engine {
 		pprof.Register(router)
 	}
 
-	router.Use(globalMiddlewares...)
 	isReady.Store(true)
 	isHealthy.Store(true)
 	return router

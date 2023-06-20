@@ -8,6 +8,7 @@ import (
 	"gepaplexx/demo-service/logger"
 	"gepaplexx/demo-service/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
 	"math/rand"
 	"net/http"
 	"runtime"
@@ -125,7 +126,6 @@ func infoMiddleware(cfg *api.Config) gin.HandlerFunc {
 			GitClean:     modified,
 		}
 
-		logger.Info("%s", applicationInfo)
 		c.Writer.WriteHeader(http.StatusOK)
 		_, err := c.Writer.Write([]byte(applicationInfo.String()))
 		utils.CheckIfError(err)
@@ -139,8 +139,7 @@ func goRoutineSpawnerMiddleware() gin.HandlerFunc {
 		if nok != nil {
 			count = 0
 		}
-
-		logger.Error("Spawning %d goroutines", count)
+		logger.Info("Spawning %d goroutines", count)
 		c.Writer.WriteHeader(http.StatusOK)
 		_, err := c.Writer.Write([]byte(fmt.Sprintf("Spawning %d goroutines", count)))
 		utils.CheckIfError(err)
@@ -169,5 +168,15 @@ func jokesMiddleware() gin.HandlerFunc {
 			}
 		}
 		c.Next()
+	}
+}
+
+func prometheusMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		timer := prometheus.NewTimer(httpDuration.WithLabelValues(c.Request.RequestURI, c.Request.Method))
+		c.Next()
+		responseStatus.WithLabelValues(string(c.Writer.Status()), c.Request.Method).Inc()
+		totalRequests.WithLabelValues(c.Request.RequestURI, c.Request.Method).Inc()
+		timer.ObserveDuration()
 	}
 }

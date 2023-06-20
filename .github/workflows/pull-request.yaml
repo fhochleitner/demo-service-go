@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-git-workflows:
+  build-demo-service-go:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,7 +15,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: push-container-image
         with:
-          image: go-git-workflows #todo rename to git-workflows
+          image: demo-service-go #todo rename to demo-service-go
           registry: ghcr.io
           username: ${{ github.repository }}
           password: ${{ secrets.GHCR_TOKEN }}
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     needs:
-      - build-git-workflows
+      - build-demo-service-go
     steps:
       - name: Notify Slack channel on failure
         uses: rtCamp/action-slack-notify@v2

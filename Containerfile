@@ -15,22 +15,21 @@ RUN GOOOS=linux GOARCH=amd64 go build -o demo-service -ldflags="-X main.version=
 
 FROM alpine:3.18.0
 
-RUN apk add --no-cache ca-certificates curl wget bash git openssh
+RUN apk add --no-cache ca-certificates curl wget bash
 
-RUN addgroup -g 1000 -S workflow && \
-    adduser -u 1000 -S workflow -G workflow
+RUN addgroup -g 1000 -S demo && \
+    adduser -u 1000 -S demo -G demo
 
-RUN mkdir -p /workflow/
+RUN mkdir -p /demo/
 
-COPY --from=BUILD /app/git-workflows /bin/git-workflows
-COPY src/templates/default-descriptor.json /workflow/default-descriptor.json
+COPY --from=BUILD /app/demo-service /bin/demo-service
 
-RUN chgrp -R 0 /workflow  && \
-    chmod -R g=u /workflow/ && \
-    chgrp -R 0 /bin/git-workflows &&  \
-    chmod -R g=u /bin/git-workflows
-
+RUN chgrp -R 0 /demo  && \
+    chmod -R g=u /demo/ && \
+    chgrp -R 0 /bin/demo-service &&  \
+    chmod -R g=u /bin/demo-service
 
 USER 1000
-
-ENTRYPOINT [ "/bin/git-workflows" ]
+EXPOSE 8080
+ENTRYPOINT [ "/bin/demo-service" ]
+CMD [ "server" ]

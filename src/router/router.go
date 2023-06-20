@@ -35,6 +35,8 @@ func Initialize(config *api.Config) *gin.Engine {
 	router.GET("/panic", panicMiddleware())
 	router.GET("/", infoMiddleware(config))
 	router.GET("/goroutines/:count", goRoutineSpawnerMiddleware())
+	router.GET("/jokes", jokesMiddleware())
+	router.GET("/jokes/random", jokesMiddleware())
 
 	// Debugging Endpoints
 	if config.Profiling {

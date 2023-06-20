@@ -1,0 +1,53 @@
+{
+  "build": {
+    "language": {
+      "name": "go",
+      "version": "1.20"
+    },
+    "type": {
+      "name": "maven",
+      "version": "3.8.6",
+      "configuration": {
+        "args": "clean install",
+        "config": "pom.xml",
+        "config-path": "",
+        "options": ""
+      }
+    },
+    "static-code-analysis": {
+      "active": "false",
+      "type": {
+        "name": "sonarqube"
+      }
+    },
+    "integration-test": {
+      "active": "false",
+      "type": {
+        "name": "newman",
+        "configuration": {
+          "port": "8080",
+          "collection": "postman.json",
+          "collection-path": "postman"
+        }
+      }
+    }
+  },
+  "image": {
+    "registry": "ghcr.io",
+    "repository": "gepaplexx",
+    "containerfile": "Containerfile"
+  },
+  "vulnerability-scan": {
+    "active": "true",
+    "type": {
+      "name": "trivy",
+      "configuration": {
+        "report-severity": "LOW,MEDIUM,HIGH,CRITICAL",
+        "fail": {
+          "active": "true",
+          "severity": "CRITICAL"
+        }
+      }
+    }
+  }
+}

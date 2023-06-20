@@ -1,0 +1,34 @@
+{
+	"info": {
+		"_postman_id": "f63c6263-867d-4c2d-92cd-f58a7b28e368",
+		"name": "basic requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10757470"
+	},
+	"item": [
+		{
+			"name": "Throw Exception",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{hostname}}/logging/exception"
+			},
+			"response": []
+		},
+		{
+			"name": "Log Error",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{hostname}}/logging/exception"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "localhost"
+		}
+	]
+}

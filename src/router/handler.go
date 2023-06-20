@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"gepaplexx/demo-service/api"
+	"gepaplexx/demo-service/consts"
 	"gepaplexx/demo-service/logger"
 	"gepaplexx/demo-service/utils"
 	"github.com/gin-gonic/gin"
+	"math/rand"
 	"net/http"
 	"runtime"
 	"runtime/debug"
@@ -151,5 +153,21 @@ func goRoutineSpawnerMiddleware() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
 
+func jokesMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		logger.Info("Jokes endpoint called")
+		c.Writer.WriteHeader(http.StatusOK)
+		if c.Request.RequestURI == "/jokes/random" {
+			_, err := c.Writer.Write([]byte(consts.Jokes[rand.Intn(len(consts.Jokes)-1)]))
+			utils.CheckIfError(err)
+		} else {
+			for _, val := range consts.Jokes {
+				_, err := c.Writer.Write([]byte(val + "\n"))
+				utils.CheckIfError(err)
+			}
+		}
+		c.Next()
+	}
 }

@@ -75,6 +75,11 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	viper.SetDefault("port", 8080)
+	viper.SetDefault("profiling", true)
+	viper.SetDefault("development", false)
+	viper.SetDefault("metricsPath", "/metrics")
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)

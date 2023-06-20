@@ -1,15 +1,6 @@
-package api
+package model
 
 import "fmt"
-
-type Config struct {
-	Port        int    `mapstructure:"port"`
-	MetricsPath string `mapstructure:"metrics_path"`
-
-	Profiling   bool   `mapstructure:"profiling"`
-	Development bool   `mapstructure:"development"`
-	Version     string `mapstructure:"version"`
-}
 
 type SysInfo struct {
 	Version      string `json:"version"`

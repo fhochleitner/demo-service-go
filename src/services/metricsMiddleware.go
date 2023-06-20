@@ -1,6 +1,7 @@
-package router
+package services
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -42,3 +43,13 @@ var httpDuration = promauto.NewHistogramVec(
 		"method",
 	},
 )
+
+func CommonMetricsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		timer := prometheus.NewTimer(httpDuration.WithLabelValues(c.Request.RequestURI, c.Request.Method))
+		c.Next()
+		responseStatus.WithLabelValues(string(rune(c.Writer.Status())), c.Request.Method).Inc()
+		totalRequests.WithLabelValues(c.Request.RequestURI, c.Request.Method).Inc()
+		timer.ObserveDuration()
+	}
+}

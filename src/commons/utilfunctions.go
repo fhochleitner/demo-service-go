@@ -1,8 +1,6 @@
-package utils
+package commons
 
-import (
-	"gepaplexx/demo-service/logger"
-)
+import "gepaplexx-demos/demo-service-go/logger"
 
 func CheckIfError(err error) {
 	if err != nil {

@@ -101,17 +101,7 @@ func infoMiddleware(cfg *api.Config) gin.HandlerFunc {
 
 		commit, builddate, modified := "unknown", "unknown", "unknown"
 		if info, ok := debug.ReadBuildInfo(); ok {
-			for _, setting := range info.Settings {
-				if setting.Key == "vcs.revision" {
-					commit = setting.Value
-				}
-				if setting.Key == "vcs.timestamp" {
-					builddate = setting.Value
-				}
-				if setting.Key == "vcs.modified" {
-					modified = setting.Value
-				}
-			}
+			commit, builddate, modified = getBuildInformation(info)
 		}
 
 		applicationInfo := api.SysInfo{
@@ -131,6 +121,23 @@ func infoMiddleware(cfg *api.Config) gin.HandlerFunc {
 		utils.CheckIfError(err)
 		c.Next()
 	}
+}
+
+func getBuildInformation(info *debug.BuildInfo) (string, string, string) {
+	var commit, builddate, modified string
+
+	for _, setting := range info.Settings {
+		if setting.Key == "vcs.revision" {
+			commit = setting.Value
+		}
+		if setting.Key == "vcs.timestamp" {
+			builddate = setting.Value
+		}
+		if setting.Key == "vcs.modified" {
+			modified = setting.Value
+		}
+	}
+	return commit, builddate, modified
 }
 
 func goRoutineSpawnerMiddleware() gin.HandlerFunc {
@@ -175,7 +182,7 @@ func prometheusMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		timer := prometheus.NewTimer(httpDuration.WithLabelValues(c.Request.RequestURI, c.Request.Method))
 		c.Next()
-		responseStatus.WithLabelValues(string(c.Writer.Status()), c.Request.Method).Inc()
+		responseStatus.WithLabelValues(string(rune(c.Writer.Status())), c.Request.Method).Inc()
 		totalRequests.WithLabelValues(c.Request.RequestURI, c.Request.Method).Inc()
 		timer.ObserveDuration()
 	}

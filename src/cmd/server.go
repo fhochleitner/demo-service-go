@@ -52,9 +52,9 @@ func init() {
 
 func serve() {
 	logger.Info("starting server on localhost:%d", Config.Port)
-	router := router.Initialize(&Config)
+	engine := router.Initialize(&Config)
 
-	err := router.Run(fmt.Sprintf(":%d", Config.Port))
+	err := engine.Run(fmt.Sprintf(":%d", Config.Port))
 	utils.CheckIfError(err)
 
 }

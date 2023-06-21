@@ -28,24 +28,8 @@ func GetJoke(id int) Joke {
 	}
 }
 
-func RateJoke(id int, rating int) Joke {
-	if joke, ok := jokes[id]; ok {
-		joke.Rating = rating
-		jokes[id] = joke
-		return joke
-	} else {
-		return Joke{}
-	}
-}
-
-func AddJoke(joke Joke) Joke {
-	id := len(jokes) + 1
-	jokes[id] = joke
-	return joke
-}
-
 func (j *Joke) String() string {
-	return fmt.Sprintf("ID: %d\nJoke: %s\nRating: %d\n\n", j.Joke, j.Rating)
+	return fmt.Sprintf("Joke: %s\nRating: %d\n\n", j.Joke, j.Rating)
 }
 
 func init() {

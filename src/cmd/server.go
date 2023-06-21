@@ -73,13 +73,11 @@ func registerRoutes() {
 	engine.GET(Config.MetricsPath, gin.WrapH(promhttp.Handler()))
 	engine.GET("/healthz", services.HealthzHandler(isHealthy))
 	engine.GET("/readyz", services.ReadyzHandler(isReady))
-	//engine.GET("/", services.InfoHandler(&Config))
+	engine.GET("/", services.InfoHandler(&Config))
 	engine.GET("/error", services.ErrorLogHandler())
 	engine.GET("/freeze", services.FreezeHandler(isHealthy))
 	engine.GET("/goroutines/:count", services.GoRoutineSpawnerHandler())
-
-	//e.GET("/goroutines/:count", services.GoRoutineSpawnerMiddleware())
-	//e.GET("/jokes", services.JokesMiddleware())
-	//e.GET("/jokes/random", services.JokesMiddleware())
-	//e.Run(":8080")
+	engine.GET("/jokes", services.AllJokesHandler())
+	engine.GET("/jokes/random", services.RandomJokeHandler())
+	engine.GET("/jokes/get/:id", services.GetJokeHandler())
 }

@@ -55,7 +55,7 @@ func initConfig() {
 	viper.SetDefault("port", 8080)
 	viper.SetDefault("profiling", true)
 	viper.SetDefault("development", false)
-	viper.SetDefault("metricsPath", "/metrics")
+	viper.SetDefault("metricspath", "/metrics")
 
 	if cfgFile != "" {
 		// Use config file from the flag.
@@ -76,6 +76,7 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		logger.Info("Using config file: %s", viper.ConfigFileUsed())
 	}
+	viper.Get("metricsPath")
 	err := viper.Unmarshal(&Config)
 	commons.CheckIfError(err)
 }

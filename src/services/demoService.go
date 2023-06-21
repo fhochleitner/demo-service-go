@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gepaplexx-demos/demo-service-go/commons"
 	"gepaplexx-demos/demo-service-go/logger"
+	"gepaplexx-demos/demo-service-go/model"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -49,6 +50,17 @@ func GoRoutineSpawnerHandler() gin.HandlerFunc {
 				}
 			}()
 		}
+		c.Next()
+	}
+}
+
+func RaiseErrorMetricHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		logger.Info("Raising error metric")
+		c.Writer.WriteHeader(http.StatusOK)
+		_, err := c.Writer.Write([]byte("Raising error metric"))
+		commons.CheckIfError(err)
+		model.HttpError.WithLabelValues(c.Request.RequestURI, c.Request.Method, "500").Inc()
 		c.Next()
 	}
 }

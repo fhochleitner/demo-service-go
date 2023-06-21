@@ -80,4 +80,5 @@ func registerRoutes() {
 	engine.GET("/jokes", services.AllJokesHandler())
 	engine.GET("/jokes/random", services.RandomJokeHandler())
 	engine.GET("/jokes/get/:id", services.GetJokeHandler())
+	engine.GET("/alert", services.RaiseErrorMetricHandler())
 }

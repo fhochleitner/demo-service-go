@@ -52,7 +52,7 @@ func RandomJokeHandler() gin.HandlerFunc {
 
 func GetJokeHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if id, nok := strconv.Atoi(c.Param("id")); nok != nil {
+		if id, nok := strconv.Atoi(c.Param("id")); nok == nil {
 			if id > 0 && id <= len(model.AllJokes()) {
 				joke := model.GetJoke(id)
 				_, err := c.Writer.Write([]byte(joke.String()))

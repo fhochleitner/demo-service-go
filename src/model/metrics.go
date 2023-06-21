@@ -22,7 +22,6 @@ var ResponseStatus = prometheus.NewCounterVec(
 		Help: "Status of HTTP response",
 	},
 	[]string{
-		"path",
 		"status",
 		"method",
 	},
